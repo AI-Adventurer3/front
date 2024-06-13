@@ -1,13 +1,33 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+nav {
+  margin-top: -16px;
+  background-color: rgb(206, 206, 206);
+  height: 65px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+nav ul {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  justify-content: center;
+}
+
+nav li {
+  margin-right: 50px;
+  font-size:40px;
+}
+
+nav li:last-child {
+  margin-right: 0;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  font-size: 25px;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: #007bff; /* 호버 시 색상 변경 */
 }
