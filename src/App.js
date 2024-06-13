@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        AI모험가들
+        AI모험가들 친구들
       </header>
     </div>
   );
