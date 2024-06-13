@@ -6,6 +6,7 @@ import MainPage from './pages/MainPage';
 import RegisterPage from './pages/RegisterPage';
 import DangerPage from './pages/DangerPage';
 import ListPage from './pages/ListPage';
+import IntroPage from './pages/IntroPage';
 import './App.css';
 
 function App() {
@@ -39,6 +40,12 @@ function App() {
                 setResults={setResults} 
                 dangerousPersons={dangerousPersons} 
               />
+            } 
+          />
+          <Route 
+            path="/intro" 
+            element={
+              <IntroPage/>
             } 
           />
           <Route 
