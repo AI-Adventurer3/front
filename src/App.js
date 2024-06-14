@@ -1,10 +1,7 @@
-// src/App.js
-import React, { useState, useEffect } from 'react'; // useState와 useEffect를 추가로 가져옴
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
-// import MainPage from './pages/DangerPg';
 import RegisterPage from './pages/RegisterPage';
-//import DangerPage from './pages/DangerPage'; //삭제
 import DangerPg from './pages/DangerPg';
 import ListPage from './pages/ListPage';
 import IntroPage from './pages/IntroPage';
@@ -13,6 +10,7 @@ import './App.css';
 function App() {
   const [results, setResults] = useState([]); // 모든 결과를 저장할 상태
   const [dangerousPersons, setDangerousPersons] = useState([]);
+  const [comparisonResult, setComparisonResult] = useState(null); // 비교 결과를 저장할 상태
 
   useEffect(() => {
     // 로컬 스토리지에서 위험인물 데이터를 가져옴
@@ -33,13 +31,15 @@ function App() {
       <div className="App">
         <Navbar />
         <Routes>
-        <Route 
+          <Route 
             path="/" 
             element={
               <DangerPg 
                 results={results} 
                 setResults={setResults} 
-                dangerousPersons={dangerousPersons} 
+                dangerousPersons={dangerousPersons}
+                comparisonResult={comparisonResult}
+                setComparisonResult={setComparisonResult} 
               />
             } 
           />
@@ -50,6 +50,8 @@ function App() {
                 results={results} 
                 setResults={setResults} 
                 dangerousPersons={dangerousPersons} 
+                comparisonResult={comparisonResult}
+                setComparisonResult={setComparisonResult}
               />
             } 
           />
@@ -68,15 +70,6 @@ function App() {
               />
             } 
           />
-          {/* <Route 
-            path="/danger" 
-            element={
-              <DangerPage 
-                dangerousPersons={dangerousPersons} 
-                setDangerousPersons={setDangerousPersons} 
-              />
-            } 
-          /> */}
           <Route 
             path="/list" 
             element={
