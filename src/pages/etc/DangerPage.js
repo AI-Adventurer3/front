@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 
-function MainPage({ results, setResults, dangerousPersons }) {
+function DangerPage({ results, setResults, dangerousPersons }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [previewURLs, setPreviewURLs] = useState([]);
@@ -110,4 +110,4 @@ function MainPage({ results, setResults, dangerousPersons }) {
   );
 }
 
-export default MainPage;
+export default DangerPage;

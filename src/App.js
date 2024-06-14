@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from 'react'; // useState와 useEffect를 추가로 가져옴
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import MainPage from './pages/MainPage';
+// import MainPage from './pages/DangerPg';
 import RegisterPage from './pages/RegisterPage';
-import DangerPage from './pages/DangerPage';
+//import DangerPage from './pages/DangerPage'; //삭제
+import DangerPg from './pages/DangerPg';
 import ListPage from './pages/ListPage';
 import './App.css';
 
@@ -31,10 +32,20 @@ function App() {
       <div className="App">
         <Navbar />
         <Routes>
-          <Route 
+        <Route 
             path="/" 
             element={
-              <MainPage 
+              <DangerPg 
+                results={results} 
+                setResults={setResults} 
+                dangerousPersons={dangerousPersons} 
+              />
+            } 
+          />
+          <Route 
+            path="/dangerpg" 
+            element={
+              <DangerPg 
                 results={results} 
                 setResults={setResults} 
                 dangerousPersons={dangerousPersons} 
@@ -50,7 +61,7 @@ function App() {
               />
             } 
           />
-          <Route 
+          {/* <Route 
             path="/danger" 
             element={
               <DangerPage 
@@ -58,7 +69,7 @@ function App() {
                 setDangerousPersons={setDangerousPersons} 
               />
             } 
-          />
+          /> */}
           <Route 
             path="/list" 
             element={
