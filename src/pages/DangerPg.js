@@ -1,11 +1,16 @@
-// src/pages/MainPage.js
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
-function MainPage({ results, setResults, dangerousPersons }) {
+function DangerPg({ results, setResults, dangerousPersons }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [previewURLs, setPreviewURLs] = useState([]);
-  const fileInputRef = useRef(null); // file input 요소에 대한 참조
+  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (!results) {
+      setResults([]);
+    }
+  }, [results, setResults]);
 
   const handleFileChange = (event) => {
     const files = event.target.files;
@@ -24,6 +29,9 @@ function MainPage({ results, setResults, dangerousPersons }) {
         const response = await fetch('http://localhost:8000/classify-image/', {
           method: 'POST',
           body: formData,
+          headers: {
+            'Accept': 'application/json',
+          }
         });
         const data = await response.json();
         return data;
@@ -35,7 +43,7 @@ function MainPage({ results, setResults, dangerousPersons }) {
 
     try {
       const uploadResults = await Promise.all(uploadPromises);
-      const updatedResults = [...results, ...uploadResults];
+      const updatedResults = [...(results || []), ...uploadResults];
       setResults(updatedResults);
       checkForDangerousPersons(uploadResults);
       saveResults(updatedResults);
@@ -54,7 +62,7 @@ function MainPage({ results, setResults, dangerousPersons }) {
   const checkForDangerousPersons = (results) => {
     const foundDangerousPersons = results.filter((result) =>
       dangerousPersons.some(
-        (person) => person.name === result.name // 이름 기준으로 비교
+        (person) => result.summary && result.summary.includes(person.name)
       )
     );
     if (foundDangerousPersons.length > 0) {
@@ -84,26 +92,23 @@ function MainPage({ results, setResults, dangerousPersons }) {
         {loading ? '분석 중...' : '업로드'}
       </button>
       <button onClick={handleClearResults}>초기화</button>
-      {results.map((result, index) => (
+      {results && results.map((result, index) => (
         <div key={index} className="result">
           <h2>이미지 {index + 1} 결과:</h2>
           <div key="image">
             <img src={`data:image/jpeg;base64,${result.image_base64}`} alt={`이미지 ${index + 1}`} style={{ maxWidth: '150px' }} />
-            {result.captions.map((caption, idx) => (
-              <div key={idx}>{caption}</div>
-            ))}
-            {result.emotions.map((emotion, idx) => (
-              <div key={idx}>{emotion.label}: {emotion.score}</div>
-            ))}
-            {result.genders.map((gender, idx) => (
-              <div key={idx}>{gender.label}: {gender.score}</div>
-            ))}
-            {result.faces.map((face, idx) => (
-              <div key={idx}>{face.label}: {face.score}</div>
-            ))}
-            {result.objects.map((object, idx) => (
-              <div key={idx}>{object.label}: {object.score}</div>
-            ))}
+            <div>얼굴 상태: {result.face_status}</div>
+            <div>표정: {result.expressions ? result.expressions.join(', ') : '없음'}</div>
+            <div>캡션: {result.caption}</div>
+            <div>나이: {result.age}</div>
+            <div>
+              <strong>요약:</strong> {result.summary}
+            </div>
+            {result.is_dangerous && (
+              <div style={{ color: 'red' }}>
+                경고: 위험한 내용이 감지되었습니다!
+              </div>
+            )}
           </div>
         </div>
       ))}
@@ -111,4 +116,4 @@ function MainPage({ results, setResults, dangerousPersons }) {
   );
 }
 
-export default MainPage;
+export default DangerPg;
