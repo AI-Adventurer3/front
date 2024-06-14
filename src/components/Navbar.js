@@ -12,7 +12,7 @@ function Navbar() {
           <Link to="/register">사전등록</Link>
         </li>
         <li>
-          <Link to="/danger">오늘의 침입자</Link>
+          <Link to="/dangerpg">오늘의 침입자</Link>
         </li>
         <li>
           <Link to="/list">리스트</Link>
