@@ -1,0 +1,64 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f7f9fc;
+  height: 100vh;
+}
+
+.title {
+  font-size: 2.5em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.description {
+  font-size: 1.2em;
+  color: #666;
+}
+
+.result-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.result-item {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 110%;
+  max-width: 1000px;
+  background-color: #fff;
+}
+
+.image-container {
+  margin-right: 20px;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 새로운 스타일 추가 */
+.voice-button {
+  width: 50px; /* 버튼의 너비를 조정 */
+  padding: 5px;
+  margin-top: 10px;
+  background-color: #00aeff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.voice-button:hover {
+  background-color: #0056b3;
+}
