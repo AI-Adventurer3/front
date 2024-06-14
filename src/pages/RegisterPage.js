@@ -17,23 +17,7 @@ import criminal14 from '../criminal/criminal14.PNG';
 import criminal15 from '../criminal/criminal15.PNG';
 import criminal16 from '../criminal/criminal16.PNG';
 
-const imageList = [
-  criminal1,
-  criminal2,
-  criminal3,
-  criminal4,
-  criminal5,
-  criminal6,
-  criminal7,
-  criminal8,
-  criminal9,
-  criminal10,
-  criminal11,
-  criminal12,
-  criminal13,
-  criminal14,
-  criminal15,
-  criminal16,
+export const imageList = [
   criminal1,
   criminal2,
   criminal3,

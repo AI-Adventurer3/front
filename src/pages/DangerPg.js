@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { imageList } from './RegisterPage'; // 이미지 리스트 가져오기
 
-function DangerPg({ results, setResults, dangerousPersons }) {
+function DangerPg({ results, setResults }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [previewURLs, setPreviewURLs] = useState([]);
@@ -34,7 +35,10 @@ function DangerPg({ results, setResults, dangerousPersons }) {
           }
         });
         const data = await response.json();
-        return data;
+
+        // 이미지와 비교하여 similarity_score 추가
+        const similarityScores = await compareWithRegisterPageImages(data.image_base64);
+        return { ...data, similarityScores };
       } catch (error) {
         console.error('이미지 업로드 에러:', error);
         return { error: error.message };
@@ -45,7 +49,6 @@ function DangerPg({ results, setResults, dangerousPersons }) {
       const uploadResults = await Promise.all(uploadPromises);
       const updatedResults = [...(results || []), ...uploadResults];
       setResults(updatedResults);
-      checkForDangerousPersons(uploadResults);
       saveResults(updatedResults);
     } catch (error) {
       console.error('이미지 업로드 에러:', error);
@@ -59,15 +62,51 @@ function DangerPg({ results, setResults, dangerousPersons }) {
     }
   };
 
-  const checkForDangerousPersons = (results) => {
-    const foundDangerousPersons = results.filter((result) =>
-      dangerousPersons.some(
-        (person) => result.summary && result.summary.includes(person.name)
-      )
-    );
-    if (foundDangerousPersons.length > 0) {
-      alert('경고: 위험 인물이 감지되었습니다!');
+  const compareWithRegisterPageImages = async (base64Image) => {
+    if (!base64Image) {
+      console.error('base64Image is undefined');
+      return [];
     }
+
+    const base64Header = "data:image/jpeg;base64,";
+    const formattedBase64Image = base64Image.startsWith(base64Header) ? base64Image : `${base64Header}${base64Image}`;
+
+    const similarityPromises = imageList.map(async (image) => {
+      // image는 URL 형태이므로 이를 Blob으로 변환
+      const imageBlob = await fetch(image).then(res => res.blob());
+
+      const formData = new FormData();
+      formData.append('file1', base64ToBlob(formattedBase64Image));
+      formData.append('file2', imageBlob);
+
+      try {
+        const response = await fetch('http://localhost:8000/compare-faces/', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json',
+          }
+        });
+        const data = await response.json();
+        return { image, similarityScore: data.similarity_score };
+      } catch (error) {
+        console.error('이미지 비교 에러:', error);
+        return { image, similarityScore: 0 };
+      }
+    });
+
+    return Promise.all(similarityPromises);
+  };
+
+  const base64ToBlob = (base64) => {
+    if (!base64) {
+      console.error('base64 string is undefined');
+      return null;
+    }
+    const byteCharacters = atob(base64.split(',')[1]);
+    const byteNumbers = new Array(byteCharacters.length).fill().map((_, i) => byteCharacters.charCodeAt(i));
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: 'image/jpeg' });
   };
 
   const saveResults = (results) => {
@@ -104,11 +143,14 @@ function DangerPg({ results, setResults, dangerousPersons }) {
             <div>
               <strong>요약:</strong> {result.summary}
             </div>
-            {result.is_dangerous && (
-              <div style={{ color: 'red' }}>
-                경고: 위험한 내용이 감지되었습니다!
-              </div>
-            )}
+            <div>
+              <strong>유사도 점수:</strong>
+              {result.similarityScores && result.similarityScores.map((similarity, i) => (
+                <div key={i}>
+                  <span>이미지 {i + 1}: {similarity.similarityScore}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       ))}
