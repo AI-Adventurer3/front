@@ -1,0 +1,124 @@
+.register-page {
+    position: relative;
+    padding-bottom: 100px;
+  }
+  
+  .person-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 200px; 
+  }
+  
+  .person-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    width: 300px;
+    position: relative;
+  }
+  
+  .image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+  }
+  
+  .image-info {
+    text-align: center;
+    font-size: 14px;
+    color: #ffffff;
+  }
+  
+  .image-name {
+    font-weight: bold;
+  }
+  
+  .image-crime {
+    color: #bd9f9f;
+  }
+
+  .person-item img {
+    width: 150px;
+    height: 150px;
+    margin-right: 15px; /* 이미지와 텍스트 사이에 여유 공간 추가 */
+    object-fit: cover;
+  }
+  
+  .name-container {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+  }
+  
+  .name-container span {
+    margin-right: 10px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  .edit-button {
+    position: absolute;
+    top:73px;
+    right:10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  
+  .person-item input[type="text"] {
+    flex-grow: 1;
+    margin-right: 15px; /* 수정 입력 필드와 삭제 버튼 사이의 여유 공간 추가 */
+    padding: 5px;
+    width: 100px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .person-delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #ff5c5c;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .person-delete:hover {
+    background-color: #ff0000;
+  }
+  
+  .image-slider {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    background-color: red;
+    height: 180px;
+  }
+  
+  .image-list {
+    display: flex;
+    transition: transform 1s ease;
+  }
+  
+  .image-item {
+    flex: 0 0 auto;
+    width: 100px;
+    height: 110px;
+    margin-right: 10px;
+  }
+  

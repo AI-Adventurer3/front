@@ -1,4 +1,3 @@
-// src/pages/MainPage.js
 import React, { useState, useRef } from 'react';
 
 function MainPage({ results, setResults, dangerousPersons }) {
