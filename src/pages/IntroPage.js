@@ -96,6 +96,34 @@ function IntroPage() {
     }
   };
 
+  const stopVideoFeed = async () => {
+    console.log("POST 요청을 보냅니다: /stop_video_feed/");
+    try {
+      const response = await fetch('http://localhost:8000/stop_video_feed/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("성공적인 응답:", data.message); // 성공 메시지 출력
+
+        // 웹캠 스트림 중단
+        if (videoRef.current && videoRef.current.srcObject) {
+          let tracks = videoRef.current.srcObject.getTracks();
+          tracks.forEach(track => track.stop());
+          videoRef.current.srcObject = null;
+        }
+      } else {
+        console.error('비디오 피드 중단 실패, 상태 코드:', response.status);
+      }
+    } catch (error) {
+      console.error('에러 발생:', error);
+    }
+  };
+
   useEffect(() => {
     return () => {
 
@@ -117,6 +145,7 @@ function IntroPage() {
       <button onClick={startCapture}>캡처 시작</button>
       <button onClick={stopCapture}>캡처 중단</button>
       <button onClick={processImages}>이미지 인식</button>
+      <button onClick={stopVideoFeed}>비디오 중단</button>
       <p>인물 감지</p>
     </div>
   );
