@@ -45,7 +45,7 @@ function DangerPg({ results, setResults, dangerousPersons }) {
       const uploadResults = await Promise.all(uploadPromises);
       const updatedResults = [...(results || []), ...uploadResults];
       setResults(updatedResults);
-      checkForDangerousPersons(uploadResults);
+      checkForDangerousPersons(updatedResults);
       saveResults(updatedResults);
     } catch (error) {
       console.error('이미지 업로드 에러:', error);
@@ -59,14 +59,28 @@ function DangerPg({ results, setResults, dangerousPersons }) {
     }
   };
 
-  const checkForDangerousPersons = (results) => {
-    const foundDangerousPersons = results.filter((result) =>
-      dangerousPersons.some(
-        (person) => result.summary && result.summary.includes(person.name)
-      )
-    );
-    if (foundDangerousPersons.length > 0) {
-      alert('경고: 위험 인물이 감지되었습니다!');
+  const checkForDangerousPersons = async (results) => {
+    const formData = new FormData();
+    formData.append('uploadedFile', selectedFiles[0]); // 업로드한 첫 번째 파일만 비교
+
+    // RegisterPage.js에서 가져온 등록된 사람들의 이미지 URL 전송
+    dangerousPersons.forEach(person => {
+      formData.append('registeredFiles', person.url);
+    });
+
+    try {
+      const response = await fetch('http://localhost:8000/compare-with-registered/', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+
+      // 결과에 따라 경고 메시지 출력
+      if (data.isDangerous) {
+        alert('경고: 위험 인물이 감지되었습니다!');
+      }
+    } catch (error) {
+      console.error('사전 등록된 이미지와 비교 중 에러:', error);
     }
   };
 

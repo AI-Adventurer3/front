@@ -66,15 +66,14 @@ const sliderData = [
   { url: criminal11, name: "11", crime: "Theft" },
   { url: criminal12, name: "12", crime: "Theft" },
   { url: criminal13, name: "13", crime: "Theft" },
-  { url: criminal14, name: "14", crime: "Theft" },
-  { url: criminal15, name: "15", crime: "Theft" },
-  { url: criminal16, name: "16", crime: "Theft" },
+  { url: criminal14, name: "Joh555oe", crime: "Theft" },
+  { url: criminal15, name: "J235 Doe", crime: "Theft" },
+  { url: criminal16, name: "Joh11111e", crime: "Theft" },
 ];
-
 function RegisterPage({ dangerousPersons, setDangerousPersons }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [editMode, setEditMode] = useState({}); // 이름 수정 모드 상태 관리
   const fileInputRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -125,11 +124,6 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
 
   const toggleEditMode = (id) => {
     setEditMode((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-// eslint-disable-next-line
-  const handleNameChange = (id, newName) => {
-    updateName(id, newName);
-    setEditMode((prev) => ({ ...prev, [id]: false }));
   };
 
   return (
