@@ -6,19 +6,16 @@ function Navbar() {
     <nav>
       <ul>
         <li>
-          <Link to="/intro">intro</Link>
+          <Link to="/">🔴Live</Link>
         </li>
         <li>
-          <Link to="/">메인 페이지</Link>
+          <Link to="/register">💢사전등록</Link>
         </li>
         <li>
-          <Link to="/register">사전등록</Link>
+          <Link to="/dangerpg">💥오늘의 침입자</Link>
         </li>
         <li>
-          <Link to="/dangerpg">오늘의 침입자</Link>
-        </li>
-        <li>
-          <Link to="/list">리스트</Link>
+          <Link to="/list">✅리스트</Link>
         </li>
       </ul>
     </nav>
