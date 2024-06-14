@@ -6,6 +6,9 @@ function Navbar() {
     <nav>
       <ul>
         <li>
+          <Link to="/intro">intro</Link>
+        </li>
+        <li>
           <Link to="/">메인 페이지</Link>
         </li>
         <li>

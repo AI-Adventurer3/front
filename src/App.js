@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import RegisterPage from './pages/RegisterPage';
 import DangerPg from './pages/DangerPg';
 import ListPage from './pages/ListPage';
+import IntroPage from './pages/IntroPage';
 import './App.css';
 
 function App() {
@@ -52,6 +53,12 @@ function App() {
                 comparisonResult={comparisonResult}
                 setComparisonResult={setComparisonResult}
               />
+            } 
+          />
+          <Route 
+            path="/intro" 
+            element={
+              <IntroPage/>
             } 
           />
           <Route 
