@@ -1,4 +1,5 @@
-import React, { useRef } from 'react';
+// eslint-disable-next-line
+import React, { useRef, useEffect } from 'react';
 import './IntroPage.css';  // CSS 파일을 임포트
 
 function IntroPage() {
@@ -94,6 +95,18 @@ function IntroPage() {
       console.error('에러 발생:', error);
     }
   };
+
+  useEffect(() => {
+    return () => {
+
+      // 컴포넌트 언마운트 시 웹캠 스트림 중지
+      if (videoRef.current && videoRef.current.srcObject) {
+        let tracks = videoRef.current.srcObject.getTracks();
+        tracks.forEach(track => track.stop());
+        videoRef.current.srcObject = null;
+      }
+    };
+  }, []);
 
   return (
     <div>
