@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { imageList } from './RegisterPage'; // 이미지 리스트 가져오기
+import './DangerPg.css';
 
 function DangerPg({ results, setResults }) {
   const [selectedFiles, setSelectedFiles] = useState([]);

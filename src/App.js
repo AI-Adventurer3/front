@@ -34,13 +34,7 @@ function App() {
           <Route 
             path="/" 
             element={
-              <DangerPg 
-                results={results} 
-                setResults={setResults} 
-                dangerousPersons={dangerousPersons}
-                comparisonResult={comparisonResult}
-                setComparisonResult={setComparisonResult} 
-              />
+              <IntroPage/>
             } 
           />
           <Route 
@@ -53,12 +47,6 @@ function App() {
                 comparisonResult={comparisonResult}
                 setComparisonResult={setComparisonResult}
               />
-            } 
-          />
-          <Route 
-            path="/intro" 
-            element={
-              <IntroPage/>
             } 
           />
           <Route 
