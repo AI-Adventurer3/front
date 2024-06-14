@@ -70,8 +70,9 @@ const sliderData = [
   { url: criminal15, name: "J235 Doe", crime: "Theft" },
   { url: criminal16, name: "Joh11111e", crime: "Theft" },
 ];
+
 function RegisterPage({ dangerousPersons, setDangerousPersons }) {
-  const [editMode, setEditMode] = useState({}); // 이름 수정 모드 상태 관리
+  const [editMode, setEditMode] = useState({});
   const fileInputRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -168,91 +169,13 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
         <div
           className="image-list"
           style={{
-            width: `${sliderData.length * 150 * 12}px`,
-            transform: `translateX(-${currentIndex * 110}px)`,
-            transition: "transform 2s ease",
+            width: `${sliderData.length * 150}px`, // 이미지 개수에 따라 가로 길이 조절
+            transform: `translateX(-${currentIndex * 150}px)`, // 슬라이드 이동 효과
+            transition: "transform 2s ease", // 2초간 부드럽게 이동
             display: "flex",
             flexDirection: "row",
           }}
         >
-          {sliderData.map((item, index) => (
-            <div key={index} className="image-container">
-              <img
-                src={item.url}
-                alt={`이미지 ${index + 1}`}
-                className="image-item"
-              />
-              <div className="image-info">
-                <p className="image-name">이름: {item.name}</p>
-                <p className="image-crime">범죄: {item.crime}</p>
-              </div>
-            </div>
-          ))}
-          {sliderData.map((item, index) => (
-            <div key={index} className="image-container">
-              <img
-                src={item.url}
-                alt={`이미지 ${index + 1}`}
-                className="image-item"
-              />
-              <div className="image-info">
-                <p className="image-name">이름: {item.name}</p>
-                <p className="image-crime">범죄: {item.crime}</p>
-              </div>
-            </div>
-          ))}
-          {sliderData.map((item, index) => (
-            <div key={index} className="image-container">
-              <img
-                src={item.url}
-                alt={`이미지 ${index + 1}`}
-                className="image-item"
-              />
-              <div className="image-info">
-                <p className="image-name">이름: {item.name}</p>
-                <p className="image-crime">범죄: {item.crime}</p>
-              </div>
-            </div>
-          ))}
-          {sliderData.map((item, index) => (
-            <div key={index} className="image-container">
-              <img
-                src={item.url}
-                alt={`이미지 ${index + 1}`}
-                className="image-item"
-              />
-              <div className="image-info">
-                <p className="image-name">이름: {item.name}</p>
-                <p className="image-crime">범죄: {item.crime}</p>
-              </div>
-            </div>
-          ))}
-          {sliderData.map((item, index) => (
-            <div key={index} className="image-container">
-              <img
-                src={item.url}
-                alt={`이미지 ${index + 1}`}
-                className="image-item"
-              />
-              <div className="image-info">
-                <p className="image-name">이름: {item.name}</p>
-                <p className="image-crime">범죄: {item.crime}</p>
-              </div>
-            </div>
-          ))}
-          {sliderData.map((item, index) => (
-            <div key={index} className="image-container">
-              <img
-                src={item.url}
-                alt={`이미지 ${index + 1}`}
-                className="image-item"
-              />
-              <div className="image-info">
-                <p className="image-name">이름: {item.name}</p>
-                <p className="image-crime">범죄: {item.crime}</p>
-              </div>
-            </div>
-          ))}
           {sliderData.map((item, index) => (
             <div key={index} className="image-container">
               <img
