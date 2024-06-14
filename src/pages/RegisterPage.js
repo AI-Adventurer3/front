@@ -173,6 +173,71 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
               </div>
             </div>
           ))}
+          {sliderData.map((item, index) => (
+            <div key={index} className="image-container">
+              <img
+                src={item.url}
+                alt={`이미지 ${index + 1}`}
+                className="image-item"
+              />
+              <div className="image-info">
+                <p className="image-name">이름: {item.name}</p>
+                <p className="image-crime">범죄: {item.crime}</p>
+              </div>
+            </div>
+          ))}
+          {sliderData.map((item, index) => (
+            <div key={index} className="image-container">
+              <img
+                src={item.url}
+                alt={`이미지 ${index + 1}`}
+                className="image-item"
+              />
+              <div className="image-info">
+                <p className="image-name">이름: {item.name}</p>
+                <p className="image-crime">범죄: {item.crime}</p>
+              </div>
+            </div>
+          ))}
+          {sliderData.map((item, index) => (
+            <div key={index} className="image-container">
+              <img
+                src={item.url}
+                alt={`이미지 ${index + 1}`}
+                className="image-item"
+              />
+              <div className="image-info">
+                <p className="image-name">이름: {item.name}</p>
+                <p className="image-crime">범죄: {item.crime}</p>
+              </div>
+            </div>
+          ))}
+          {sliderData.map((item, index) => (
+            <div key={index} className="image-container">
+              <img
+                src={item.url}
+                alt={`이미지 ${index + 1}`}
+                className="image-item"
+              />
+              <div className="image-info">
+                <p className="image-name">이름: {item.name}</p>
+                <p className="image-crime">범죄: {item.crime}</p>
+              </div>
+            </div>
+          ))}
+          {sliderData.map((item, index) => (
+            <div key={index} className="image-container">
+              <img
+                src={item.url}
+                alt={`이미지 ${index + 1}`}
+                className="image-item"
+              />
+              <div className="image-info">
+                <p className="image-name">이름: {item.name}</p>
+                <p className="image-crime">범죄: {item.crime}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
