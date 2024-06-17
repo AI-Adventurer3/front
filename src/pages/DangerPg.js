@@ -1,6 +1,6 @@
 // DangerPg.js
 import React, { useState, useRef, useEffect } from 'react';
-import { imageList } from './RegisterPage'; // 이미지 리스트 가져오기
+import { imageList, sliderData } from './RegisterPage'; // 이미지 리스트 가져오기
 import './DangerPg.css';
 
 function DangerPg({ results, setResults, dangerousPersons }) {
@@ -89,9 +89,24 @@ function DangerPg({ results, setResults, dangerousPersons }) {
     const base64Header = "data:image/jpeg;base64,";
     const formattedBase64Image = base64Image.startsWith(base64Header) ? base64Image : `${base64Header}${base64Image}`;
 
-    const similarityPromises = imageList.map(async (image) => {
-      // image는 URL 형태이므로 이를 Blob으로 변환
-      const imageBlob = await fetch(image).then(res => res.blob());
+    const allImages = [...imageList, ...dangerousPersons];
+
+    const similarityPromises = allImages.map(async (imageData) => {
+      let imageBlob;
+      let imageName;
+
+      if (typeof imageData === 'string'){
+        if(imageData.startsWith('data:image/')){
+          imageBlob = base64ToBlob(imageData);
+        } else {
+          const response = await fetch(imageData);
+          imageBlob = await response.blob();
+        }
+        imageName = sliderData.find(item => item.url === imageData)?.name || '';
+      } else {
+        imageBlob = base64ToBlob(imageData.url);
+        imageName = imageData.name || '';
+      }
 
       const formData = new FormData();
       formData.append('file1', base64ToBlob(formattedBase64Image));
@@ -106,10 +121,10 @@ function DangerPg({ results, setResults, dangerousPersons }) {
           }
         });
         const data = await response.json();
-        return { image, similarityScore: data.similarity_score };
+        return { imageName, similarityScore: data.similarity_score };
       } catch (error) {
         console.error('이미지 비교 에러:', error);
-        return { image, similarityScore: 0 };
+        return { imageName, similarityScore: 0 };
       }
     });
 
@@ -162,12 +177,11 @@ function DangerPg({ results, setResults, dangerousPersons }) {
               <strong>정보:</strong> {currentResult.summary}
             </div>
             <div>
-              <strong>유사도 점수:</strong>
               {currentResult.similarityScores && currentResult.similarityScores
                 .filter(similarity => similarity.similarityScore >= 0.3)
                 .map((similarity, i) => (
-                  <div key={i}>
-                    <span>이미지 {i + 1}: {similarity.similarityScore}</span>
+                  <div className="warning" key={i}>
+                    <span>경고: 위험인물 {similarity.imageName} 발견!</span>
                   </div>
                 ))}
             </div>

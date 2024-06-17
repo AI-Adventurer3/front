@@ -131,6 +131,7 @@ function IntroPage() {
       if (videoRef.current && videoRef.current.srcObject) {
         let tracks = videoRef.current.srcObject.getTracks();
         tracks.forEach(track => track.stop());
+        // eslint-disable-next-line
         videoRef.current.srcObject = null;
       }
     };

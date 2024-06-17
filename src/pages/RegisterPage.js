@@ -32,27 +32,28 @@ export const imageList = [
   criminal16
 ];
 
-const sliderData = [
-  { url: criminal1, name: "1", crime: "Theft" },
-  { url: criminal2, name: "2h", crime: "Fraud" },
-  { url: criminal4, name: "4", crime: "Robbery" },
-  { url: criminal5, name: "5", crime: "Theft" },
-  { url: criminal6, name: "6", crime: "Theft" },
-  { url: criminal7, name: "7", crime: "Theft" },
-  { url: criminal8, name: "8", crime: "Theft" },
-  { url: criminal9, name: "9", crime: "Theft" },
-  { url: criminal10, name: "10", crime: "Theft" },
-  { url: criminal11, name: "11", crime: "Theft" },
-  { url: criminal13, name: "13", crime: "Theft" },
-  { url: criminal14, name: "Joh555oe", crime: "Theft" },
-  { url: criminal15, name: "J235 Doe", crime: "Theft" },
-  { url: criminal16, name: "Joh11111e", crime: "Theft" },
+export const sliderData = [
+  { url: criminal1, name: "강동호", crime: "범죄자" },
+  { url: criminal2, name: "강성운", crime: "범죄자" },
+  { url: criminal4, name: "김명호", crime: "범죄자" },
+  { url: criminal5, name: "김승현", crime: "범죄자" },
+  { url: criminal6, name: "도현정", crime: "범죄자" },
+  { url: criminal7, name: "박원천", crime: "범죄자" },
+  { url: criminal8, name: "박창용", crime: "범죄자" },
+  { url: criminal9, name: "박혜룡", crime: "범죄자" },
+  { url: criminal10, name: "신창균", crime: "범죄자" },
+  { url: criminal11, name: "윤재경", crime: "범죄자" },
+  { url: criminal13, name: "이강준", crime: "범죄자" },
+  { url: criminal14, name: "장윤", crime: "범죄자" },
+  { url: criminal15, name: "정지민", crime: "범죄자" },
+  { url: criminal16, name: "정진식", crime: "범죄자" },
 ];
 
 function RegisterPage({ dangerousPersons, setDangerousPersons }) {
   const [editMode, setEditMode] = useState({});
   const fileInputRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [nameInput, setNameInput] = useState('');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -66,20 +67,28 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
     const files = event.target.files;
     if (files.length === 0) return;
 
-    const newPerson = {
-      id: new Date().getTime(),
-      name: '이름',
-      url: URL.createObjectURL(files[0]),
+    const file = files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const base64 = reader.result;
+      const newPerson = {
+        id: new Date().getTime(),
+        name: nameInput.trim() || file.name,
+        url: base64,
+      };
+
+      const updatedDangerousPersons = [...dangerousPersons, newPerson];
+      setDangerousPersons(updatedDangerousPersons);
+      localStorage.setItem('dangerousPersons', JSON.stringify(updatedDangerousPersons));
+
+      // 파일 선택 input 초기화
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      setNameInput('');
     };
-
-    const updatedDangerousPersons = [...dangerousPersons, newPerson];
-    setDangerousPersons(updatedDangerousPersons);
-    localStorage.setItem('dangerousPersons', JSON.stringify(updatedDangerousPersons));
-
-    // 파일 선택 input 초기화
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
+    reader.readAsDataURL(file);
   };
 
   const updateName = (id, newName) => {
