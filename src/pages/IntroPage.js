@@ -19,7 +19,7 @@ function IntroPage() {
         const data = await response.json();
         console.log("성공적인 응답:", data.message); // 성공 메시지 출력
 
-        // 웹캠 스트림 시작
+        // 웹캠 스트림 시작작
         if (videoRef.current) {
           const getUserMedia = 
             navigator.mediaDevices?.getUserMedia ||
