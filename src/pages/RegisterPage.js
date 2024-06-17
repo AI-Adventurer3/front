@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import './RegisterPage.css';
 import criminal1 from '../criminal/criminal1.PNG';
 import criminal2 from '../criminal/criminal2.PNG';
-import criminal3 from '../criminal/criminal3.PNG';
 import criminal4 from '../criminal/criminal4.PNG';
 import criminal5 from '../criminal/criminal5.PNG';
 import criminal6 from '../criminal/criminal6.PNG';
@@ -11,7 +10,6 @@ import criminal8 from '../criminal/criminal8.PNG';
 import criminal9 from '../criminal/criminal9.PNG';
 import criminal10 from '../criminal/criminal10.PNG';
 import criminal11 from '../criminal/criminal11.PNG';
-import criminal12 from '../criminal/criminal12.PNG';
 import criminal13 from '../criminal/criminal13.PNG';
 import criminal14 from '../criminal/criminal14.PNG';
 import criminal15 from '../criminal/criminal15.PNG';
@@ -20,7 +18,6 @@ import criminal16 from '../criminal/criminal16.PNG';
 export const imageList = [
   criminal1,
   criminal2,
-  criminal3,
   criminal4,
   criminal5,
   criminal6,
@@ -29,7 +26,6 @@ export const imageList = [
   criminal9,
   criminal10,
   criminal11,
-  criminal12,
   criminal13,
   criminal14,
   criminal15,
@@ -39,7 +35,6 @@ export const imageList = [
 const sliderData = [
   { url: criminal1, name: "1", crime: "Theft" },
   { url: criminal2, name: "2h", crime: "Fraud" },
-  { url: criminal3, name: "3", crime: "Assault" },
   { url: criminal4, name: "4", crime: "Robbery" },
   { url: criminal5, name: "5", crime: "Theft" },
   { url: criminal6, name: "6", crime: "Theft" },
@@ -48,7 +43,6 @@ const sliderData = [
   { url: criminal9, name: "9", crime: "Theft" },
   { url: criminal10, name: "10", crime: "Theft" },
   { url: criminal11, name: "11", crime: "Theft" },
-  { url: criminal12, name: "12", crime: "Theft" },
   { url: criminal13, name: "13", crime: "Theft" },
   { url: criminal14, name: "Joh555oe", crime: "Theft" },
   { url: criminal15, name: "J235 Doe", crime: "Theft" },
