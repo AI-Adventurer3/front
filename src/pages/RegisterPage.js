@@ -32,6 +32,10 @@ export const imageList = [
   criminal16
 ];
 
+export const getImageListLength = () => {
+  return imageList.length;
+};
+
 export const sliderData = [
   { url: criminal1, name: "강동호", crime: "범죄자" },
   { url: criminal2, name: "강성운", crime: "범죄자" },
@@ -74,7 +78,7 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
       const base64 = reader.result;
       const newPerson = {
         id: new Date().getTime(),
-        name: nameInput.trim() || file.name,
+        name: nameInput.trim() || '이름',
         url: base64,
       };
 
@@ -105,14 +109,11 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
     localStorage.setItem('dangerousPersons', JSON.stringify(updatedDangerousPersons));
   };
 
-  const handleClearAll = () => {
-    setDangerousPersons([]);
-    localStorage.removeItem('dangerousPersons');
-  };
-
   const toggleEditMode = (id) => {
     setEditMode((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.getMonth() + 1}월 ${currentDate.getDate()}일`;
 
   return (
     <div className="register-page">
@@ -123,10 +124,6 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
         accept="image/*"
         ref={fileInputRef}
       />
-      <h3>등록된 위험인물</h3>
-      <button onClick={handleClearAll}>
-        모든 위험인물 초기화
-      </button>
       <div className="person-list">
         {dangerousPersons.map((person) => (
           <div key={person.id} className="person-item">
@@ -153,11 +150,12 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
         ))}
       </div>
       <div className="image-slider">
+        <p className='slider-title'>{formattedDate} 우리 동네에 {imageList.length}명의 성범죄자가 있습니다. </p>
         <div
           className="image-list"
           style={{
             width: `${sliderData.length * 150}px`, // 이미지 개수에 따라 가로 길이 조절
-            transform: `translateX(-${currentIndex * 150}px)`, // 슬라이드 이동 효과
+            transform: `translateX(-${currentIndex * 170}px)`, // 슬라이드 이동 효과
             transition: "transform 2s ease", // 2초간 부드럽게 이동
             display: "flex",
             flexDirection: "row",
@@ -171,8 +169,7 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
                 className="image-item"
               />
               <div className="image-info">
-                <p className="image-name">이름: {item.name}</p>
-                <p className="image-crime">범죄: {item.crime}</p>
+                <p className="image-name">{item.name}</p>
               </div>
             </div>
           ))}
@@ -184,8 +181,7 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
                 className="image-item"
               />
               <div className="image-info">
-                <p className="image-name">이름: {item.name}</p>
-                <p className="image-crime">범죄: {item.crime}</p>
+                <p className="image-name">{item.name}</p>
               </div>
             </div>
           ))}
@@ -197,8 +193,7 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
                 className="image-item"
               />
               <div className="image-info">
-                <p className="image-name">이름: {item.name}</p>
-                <p className="image-crime">범죄: {item.crime}</p>
+                <p className="image-name">{item.name}</p>
               </div>
             </div>
           ))}
@@ -210,8 +205,7 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
                 className="image-item"
               />
               <div className="image-info">
-                <p className="image-name">이름: {item.name}</p>
-                <p className="image-crime">범죄: {item.crime}</p>
+                <p className="image-name">{item.name}</p>
               </div>
             </div>
           ))}
@@ -223,8 +217,7 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
                 className="image-item"
               />
               <div className="image-info">
-                <p className="image-name">이름: {item.name}</p>
-                <p className="image-crime">범죄: {item.crime}</p>
+                <p className="image-name">{item.name}</p>
               </div>
             </div>
           ))}
@@ -236,8 +229,31 @@ function RegisterPage({ dangerousPersons, setDangerousPersons }) {
                 className="image-item"
               />
               <div className="image-info">
-                <p className="image-name">이름: {item.name}</p>
-                <p className="image-crime">범죄: {item.crime}</p>
+                <p className="image-name">{item.name}</p>
+              </div>
+            </div>
+          ))}
+          {sliderData.map((item, index) => (
+            <div key={index} className="image-container">
+              <img
+                src={item.url}
+                alt={`이미지 ${index + 1}`}
+                className="image-item"
+              />
+              <div className="image-info">
+                <p className="image-name">{item.name}</p>
+              </div>
+            </div>
+          ))}
+          {sliderData.map((item, index) => (
+            <div key={index} className="image-container">
+              <img
+                src={item.url}
+                alt={`이미지 ${index + 1}`}
+                className="image-item"
+              />
+              <div className="image-info">
+                <p className="image-name">{item.name}</p>
               </div>
             </div>
           ))}
