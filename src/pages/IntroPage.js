@@ -1,154 +1,86 @@
-// eslint-disable-next-line
-import React, { useRef, useEffect } from 'react';
-import './IntroPage.css';  // CSS 파일을 임포트
+import React, { useEffect, useState } from 'react';
+import './ListPage.css';
 
-function IntroPage() {
-  const videoRef = useRef(null);
-
-  const startCapture = async () => {
-    console.log("POST 요청을 보냅니다: /start-capture/");
-    try {
-      const response = await fetch('http://localhost:8000/start-capture/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("성공적인 응답:", data.message); // 성공 메시지 출력
-
-        // 웹캠 스트림 시작
-        if (videoRef.current) {
-          const getUserMedia = 
-            navigator.mediaDevices?.getUserMedia ||
-            navigator.getUserMedia ||
-            navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia;
-
-          if (getUserMedia) {
-            getUserMedia.call(navigator.mediaDevices || navigator, { video: true })
-              .then((stream) => {
-                videoRef.current.srcObject = stream;
-              })
-              .catch((error) => {
-                console.error('웹캠 스트림을 시작할 수 없습니다:', error);
-              });
-          } else {
-            console.error('이 브라우저는 getUserMedia를 지원하지 않습니다.');
-          }
-        }
-      } else {
-        console.error('캡처 시작 실패, 상태 코드:', response.status);
-      }
-    } catch (error) {
-      console.error('에러 발생:', error);
-    }
-  };
-
-  const stopCapture = async () => {
-    console.log("POST 요청을 보냅니다: /stop-capture/");
-    try {
-      const response = await fetch('http://localhost:8000/stop-capture/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("성공적인 응답:", data.message); // 성공 메시지 출력
-
-        // 웹캠 스트림 중단
-        if (videoRef.current && videoRef.current.srcObject) {
-          let tracks = videoRef.current.srcObject.getTracks();
-          tracks.forEach(track => track.stop());
-          videoRef.current.srcObject = null;
-        }
-      } else {
-        console.error('캡처 중단 실패, 상태 코드:', response.status);
-      }
-    } catch (error) {
-      console.error('에러 발생:', error);
-    }
-  };
-
-  const processImages = async () => {
-    console.log("POST 요청을 보냅니다: /process-images/");
-    try {
-      const response = await fetch('http://localhost:8000/process-images/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("성공적인 응답:", data.results); // 성공 메시지 출력
-      } else {
-        console.error('이미지 인식 실패, 상태 코드:', response.status);
-      }
-    } catch (error) {
-      console.error('에러 발생:', error);
-    }
-  };
-
-  const stopVideoFeed = async () => {
-    console.log("POST 요청을 보냅니다: /stop_video_feed/");
-    try {
-      const response = await fetch('http://localhost:8000/stop_video_feed/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("성공적인 응답:", data.message); // 성공 메시지 출력
-
-        // 웹캠 스트림 중단
-        if (videoRef.current && videoRef.current.srcObject) {
-          let tracks = videoRef.current.srcObject.getTracks();
-          tracks.forEach(track => track.stop());
-          videoRef.current.srcObject = null;
-        }
-      } else {
-        console.error('비디오 피드 중단 실패, 상태 코드:', response.status);
-      }
-    } catch (error) {
-      console.error('에러 발생:', error);
-    }
-  };
+function ListPage() {
+  const [results, setResults] = useState([]);
+  const [dangerousCount, setDangerousCount] = useState(0);
+  const [normalCount, setNormalCount] = useState(0);
 
   useEffect(() => {
-    return () => {
-
-      // 컴포넌트 언마운트 시 웹캠 스트림 중지
-      if (videoRef.current && videoRef.current.srcObject) {
-        let tracks = videoRef.current.srcObject.getTracks();
-        tracks.forEach(track => track.stop());
-        videoRef.current.srcObject = null;
-      }
-    };
+    const savedResults = localStorage.getItem('results');
+    if (savedResults) {
+      const parsedResults = JSON.parse(savedResults);
+      setResults(parsedResults);
+      countResults(parsedResults);
+    }
   }, []);
 
+  const countResults = (results) => {
+    const dangerous = results.filter(result => result.is_dangerous).length;
+    const normal = results.length - dangerous;
+    setDangerousCount(dangerous);
+    setNormalCount(normal);
+  };
+
+  const speakText = (text) => {
+    const speech = new SpeechSynthesisUtterance();
+    speech.text = text;
+    speech.lang = 'ko-KR'; // 한국어 설정
+    window.speechSynthesis.speak(speech);
+  };
+
   return (
-    <div>
-      <h3>인트로 페이지</h3>
-      <div className="live_box">
-        <video ref={videoRef} autoPlay />
+    <div className="page-container">
+      <header>
+        <h1 className="title">입구컷 침입자 목록</h1>
+      </header>
+      <p className="description">입구컷 침입자 리스트</p>
+      <div className="count-container">
+        <div className="count-box dangerous">
+          <h3>위험 인물</h3>
+          <p>{dangerousCount}명</p>
+        </div>
+        <div className="count-box">
+          <h3>일반 침입자</h3>
+          <p>{normalCount}명</p>
+        </div>
       </div>
-      <button onClick={startCapture}>캡처 시작</button>
-      <button onClick={stopCapture}>캡처 중단</button>
-      <button onClick={processImages}>이미지 인식</button>
-      <button onClick={stopVideoFeed}>비디오 중단</button>
-      <p>인물 감지</p>
+      <div className="result-container">
+        {results.length > 0 ? (
+          results.map((result, index) => (
+            <div className={`result-item ${result.is_dangerous ? 'dangerous' : ''}`} key={index}>
+              <div className="image-container">
+                {result.image_base64 && (
+                  <img
+                    src={`data:image/jpeg;base64,${result.image_base64}`}
+                    alt={`이미지 ${index + 1}`}
+                  />
+                )}
+              </div>
+              <div className="info-container">
+                <div className="title-and-button">
+                  <h2>침입자 {index + 1}:</h2>
+                  <button 
+                    className="voice-button" 
+                    onClick={() => speakText(result.summary)}>🔊</button>
+                </div>
+                <div>
+                  <strong>정보:</strong> {result.summary}
+                </div>
+                {result.is_dangerous && (
+                  <div className="warning">
+                    경고: 위험한 내용이 감지되었습니다!
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>등록된 침입자가 없습니다.</p>
+        )}
+      </div>
     </div>
   );
 }
 
-export default IntroPage;
+export default ListPage;

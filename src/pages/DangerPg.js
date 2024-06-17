@@ -1,11 +1,14 @@
+// DangerPg.js
 import React, { useState, useRef, useEffect } from 'react';
 import { imageList } from './RegisterPage'; // 이미지 리스트 가져오기
 import './DangerPg.css';
 
-function DangerPg({ results, setResults }) {
+function DangerPg({ results, setResults, dangerousPersons }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [previewURLs, setPreviewURLs] = useState([]);
+  const [error] = useState('');
+  const [currentResult, setCurrentResult] = useState(null);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -48,8 +51,11 @@ function DangerPg({ results, setResults }) {
 
     try {
       const uploadResults = await Promise.all(uploadPromises);
-      const updatedResults = [...(results || []), ...uploadResults];
+      const latestResult = uploadResults[uploadResults.length - 1];
+      setCurrentResult(latestResult);
+      const updatedResults = [...(results || []), latestResult];
       setResults(updatedResults);
+      checkForDangerousPersons([latestResult]);
       saveResults(updatedResults);
     } catch (error) {
       console.error('이미지 업로드 에러:', error);
@@ -60,6 +66,17 @@ function DangerPg({ results, setResults }) {
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
+    }
+  };
+
+  const checkForDangerousPersons = (results) => {
+    const foundDangerousPersons = results.filter((result) =>
+      dangerousPersons.some(
+        (person) => result.summary && result.summary.includes(person.name)
+      )
+    );
+    if (foundDangerousPersons.length > 0) {
+      alert('경고: 위험 인물이 감지되었습니다!');
     }
   };
 
@@ -117,44 +134,51 @@ function DangerPg({ results, setResults }) {
   const handleClearResults = () => {
     localStorage.removeItem('results');
     setResults([]);
+    setCurrentResult(null);
   };
 
   return (
     <div>
       <h1>오늘의 침입자를 알려줘</h1>
+      {error && <div className="error-message">{error}</div>}
       <input type="file" onChange={handleFileChange} ref={fileInputRef} multiple />
       <div className="image-previews">
         {previewURLs.map((url, index) => (
-          <img key={index} src={url} alt={`미리 보기 ${index + 1}`} style={{ maxWidth: '150px' }} />
+          <img key={index} src={url} alt={`미리 보기 ${index + 1}`} />
         ))}
       </div>
-      <button onClick={handleUpload} disabled={!selectedFiles.length || loading}>
-        {loading ? '분석 중...' : '업로드'}
-      </button>
-      <button onClick={handleClearResults}>초기화</button>
-      {results && results.map((result, index) => (
-        <div key={index} className="result">
-          <h2>이미지 {index + 1} 결과:</h2>
-          <div key="image">
-            <img src={`data:image/jpeg;base64,${result.image_base64}`} alt={`이미지 ${index + 1}`} style={{ maxWidth: '150px' }} />
-            <div>얼굴 상태: {result.face_status}</div>
-            <div>표정: {result.expressions ? result.expressions.join(', ') : '없음'}</div>
-            <div>캡션: {result.caption}</div>
-            <div>나이: {result.age}</div>
+      <div className="button-container">
+        <button onClick={handleUpload} disabled={!selectedFiles.length || loading}>
+          {loading ? '분석 중...' : '업로드'}
+        </button>
+        <button onClick={handleClearResults}>초기화</button>
+      </div>
+      {currentResult && (
+        <div className={`result ${currentResult.is_dangerous ? 'dangerous' : ''}`}>
+          <img src={`data:image/jpeg;base64,${currentResult.image_base64}`} alt="분석 결과 이미지" />
+          <div className="result-content">
+            <h2>이미지 분석 결과:</h2>
             <div>
-              <strong>요약:</strong> {result.summary}
+              <strong>정보:</strong> {currentResult.summary}
             </div>
             <div>
               <strong>유사도 점수:</strong>
-              {result.similarityScores && result.similarityScores.map((similarity, i) => (
-                <div key={i}>
-                  <span>이미지 {i + 1}: {similarity.similarityScore}</span>
-                </div>
-              ))}
+              {currentResult.similarityScores && currentResult.similarityScores
+                .filter(similarity => similarity.similarityScore >= 0.3)
+                .map((similarity, i) => (
+                  <div key={i}>
+                    <span>이미지 {i + 1}: {similarity.similarityScore}</span>
+                  </div>
+                ))}
             </div>
+            {currentResult.is_dangerous && (
+              <div className="warning">
+                경고: 위험한 내용이 감지되었습니다!
+              </div>
+            )}
           </div>
         </div>
-      ))}
+      )}
     </div>
   );
 }
