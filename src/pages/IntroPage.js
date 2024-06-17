@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 import React, { useRef, useEffect } from 'react';
 import './IntroPage.css';  // CSS 파일을 임포트
 
@@ -19,7 +18,7 @@ function IntroPage() {
         const data = await response.json();
         console.log("성공적인 응답:", data.message); // 성공 메시지 출력
 
-        // 웹캠 스트림 시작작
+        // 웹캠 스트림 시작
         if (videoRef.current) {
           const getUserMedia = 
             navigator.mediaDevices?.getUserMedia ||
@@ -87,7 +86,7 @@ function IntroPage() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("성공적인 응답:", data.results); // 성공 메시지 출력
+        console.log("성공적인 응답:", data.similarities); // 성공 메시지 출력
       } else {
         console.error('이미지 인식 실패, 상태 코드:', response.status);
       }
@@ -96,37 +95,8 @@ function IntroPage() {
     }
   };
 
-  const stopVideoFeed = async () => {
-    console.log("POST 요청을 보냅니다: /stop_video_feed/");
-    try {
-      const response = await fetch('http://localhost:8000/stop_video_feed/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("성공적인 응답:", data.message); // 성공 메시지 출력
-
-        // 웹캠 스트림 중단
-        if (videoRef.current && videoRef.current.srcObject) {
-          let tracks = videoRef.current.srcObject.getTracks();
-          tracks.forEach(track => track.stop());
-          videoRef.current.srcObject = null;
-        }
-      } else {
-        console.error('비디오 피드 중단 실패, 상태 코드:', response.status);
-      }
-    } catch (error) {
-      console.error('에러 발생:', error);
-    }
-  };
-
   useEffect(() => {
     return () => {
-
       // 컴포넌트 언마운트 시 웹캠 스트림 중지
       if (videoRef.current && videoRef.current.srcObject) {
         let tracks = videoRef.current.srcObject.getTracks();
@@ -140,13 +110,11 @@ function IntroPage() {
     <div>
       <h3>인트로 페이지</h3>
       <div className="live_box">
-        <video ref={videoRef} autoPlay />
+        <video ref={videoRef} autoPlay playsInline />
       </div>
       <button onClick={startCapture}>캡처 시작</button>
       <button onClick={stopCapture}>캡처 중단</button>
       <button onClick={processImages}>이미지 인식</button>
-      <button onClick={stopVideoFeed}>비디오 중단</button>
-      <p>인물 감지</p>
     </div>
   );
 }
