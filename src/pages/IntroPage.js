@@ -98,11 +98,20 @@ function IntroPage() {
   useEffect(() => {
     return () => {
       // 컴포넌트 언마운트 시 웹캠 스트림 중지
+<<<<<<< HEAD
       // if (webcamRef.current && webcamRef.current.srcObject) {
       //   let tracks = webcamRef.current.srcObject.getTracks();
       //   tracks.forEach(track => track.stop());
       //   webcamRef.current.srcObject = null;
       // }
+=======
+      if (videoRef.current && videoRef.current.srcObject) {
+        let tracks = videoRef.current.srcObject.getTracks();
+        tracks.forEach(track => track.stop());
+        // eslint-disable-next-line
+        videoRef.current.srcObject = null;
+      }
+>>>>>>> f06400adcfb66d43fd2dca70b112c162f5d5ff90
     };
   }, []);
 
