@@ -1,3 +1,4 @@
+// ListPage.js
 import React, { useEffect, useState } from 'react';
 import './ListPage.css';
 
@@ -16,7 +17,11 @@ function ListPage() {
   }, []);
 
   const countResults = (results) => {
-    const dangerous = results.filter(result => result.is_dangerous).length;
+    // dangerous 계산: is_dangerous 또는 similarityScores에 유사도가 높은 항목이 있을 경우
+    const dangerous = results.filter(result => {
+      return result.is_dangerous || (result.similarityScores && result.similarityScores.some(score => score.similarityScore >= 0.3));
+    }).length;
+
     const normal = results.length - dangerous;
     setDangerousCount(dangerous);
     setNormalCount(normal);
@@ -72,6 +77,13 @@ function ListPage() {
                     경고: 위험한 내용이 감지되었습니다!
                   </div>
                 )}
+                {result.similarityScores && result.similarityScores
+                  .filter(score => score.similarityScore >= 0.3)
+                  .map((score, i) => (
+                    <div className="warning" key={i}>
+                      경고: 위험인물 {score.imageName} 발견!
+                    </div>
+                  ))}
               </div>
             </div>
           ))
