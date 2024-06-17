@@ -98,20 +98,11 @@ function IntroPage() {
   useEffect(() => {
     return () => {
       // 컴포넌트 언마운트 시 웹캠 스트림 중지
-<<<<<<< HEAD
       // if (webcamRef.current && webcamRef.current.srcObject) {
       //   let tracks = webcamRef.current.srcObject.getTracks();
       //   tracks.forEach(track => track.stop());
       //   webcamRef.current.srcObject = null;
       // }
-=======
-      if (videoRef.current && videoRef.current.srcObject) {
-        let tracks = videoRef.current.srcObject.getTracks();
-        tracks.forEach(track => track.stop());
-        // eslint-disable-next-line
-        videoRef.current.srcObject = null;
-      }
->>>>>>> f06400adcfb66d43fd2dca70b112c162f5d5ff90
     };
   }, []);
 
@@ -148,7 +139,7 @@ function IntroPage() {
           <img src={caution} style={{ width: '70px' }}/>
           <div style={{ lineHeight: '1.1' }} >
             <h2>경고</h2>
-            <h3>위험인물이 집에 찾아왔습니다.</h3>
+            <h3>위험인물이 집에 찾아왔습니다!!</h3>
           </div>
           <button onClick={closeModal} style={{ color: 'red', backgroundColor: 'white', border: 'none', margin: '10px 7px', borderRadius: '5px', cursor: 'pointer' }}>닫기</button>
         </div>
