@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import './IntroPage.css';  // CSS 파일을 임포트
+import './IntroPage.css';
 import WebcamComponent from '../components/WebcamComponent';
 import Modal from 'react-modal';
 import caution from '../img/caution.gif';
@@ -8,79 +8,67 @@ Modal.setAppElement('#root');  // 모달 접근성을 위한 설정
 
 function IntroPage() {
   const webcamRef = useRef(null);
-  const [results, setResults] = useState([]);
+  const [setResults] = useState([]);  // 필요에 따라 상태를 유지
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  // const startCapture = async () => {
-  //   console.log("POST 요청을 보냅니다: /start-capture/");
-  //   try {
-  //     const response = await fetch('http://localhost:8000/start-capture/', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     if (!response.ok) {
-  //       console.error('캡처 시작 실패, 상태 코드:', response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error('에러 발생:', error);
-  //   }
-  // };
-
-  // const stopCapture = async () => {
-  //   console.log("POST 요청을 보냅니다: /stop-capture/");
-  //   try {
-  //     const response = await fetch('http://localhost:8000/stop-capture/', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       console.log("성공적인 응답:", data.message); // 성공 메시지 출력
-
-  //       // 웹캠 스트림 중단
-  //       if (webcamRef.current && webcamRef.current.srcObject) {
-  //         let tracks = webcamRef.current.srcObject.getTracks();
-  //         tracks.forEach(track => track.stop());
-  //         webcamRef.current.srcObject = null;
-  //       }
-  //     } else {
-  //       console.error('캡처 중단 실패, 상태 코드:', response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error('에러 발생:', error);
-  //   }
-  // };
+  const [alertMessage, setAlertMessage] = useState("");
+  const [modalBackground, setModalBackground] = useState("red");
 
   const processImages = async () => {
     console.log("POST 요청을 보냅니다: /process-images/");
     const capturedImages = webcamRef.current.getCapturedImages();
+    
+    if (!capturedImages || capturedImages.length === 0) {
+      console.error('캡처된 이미지가 없습니다.');
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:8000/process-images/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ images: capturedImages })
+        body: JSON.stringify({ images: capturedImages }),
+        credentials: 'include'  // 필요한 경우 인증 정보를 포함하도록 설정
       });
 
       if (response.ok) {
         const data = await response.json();
-        console.log("성공적인 응답:", data.similarities); // 성공 메시지 출력
+        console.log("성공적인 응답:", data.similarities);
         setResults(data.similarities);
 
+        // 성범죄자 이미지 파일 목록
+        const dangerousImages = [
+          'im01.PNG', 'im02.PNG', 'im03.PNG', 'im04.PNG', 'im05.PNG', 
+          'im06.PNG', 'im07.PNG', 'im08.PNG', 'im09.PNG', 'im10.PNG', 
+          'im11.PNG', 'im12.PNG', 'im13.PNG', 'im14.PNG', 'im15.PNG', 'im16.PNG'
+        ];
+
         // 0.5 이상 값 확인 후 모달 표시
-        const isDangerousPersonDetected = data.similarities.some(similarity => {
-          const similarityValue = parseFloat(similarity.match(/유사도.*?: ([0-9.]+)/)[1]);
-          return similarityValue >= 0.5;
+        let isDangerousPersonDetected = false;
+        let isCriminalDetected = false;
+
+        data.similarities.forEach(similarity => {
+          const match = similarity.match(/유사도.*?: ([0-9.]+)/);
+          if (match) {
+            const similarityValue = parseFloat(match[1]);
+            const isDangerousImage = dangerousImages.some(imgName => similarity.includes(imgName));
+
+            if (similarityValue >= 0.5) {
+              if (isDangerousImage) {
+                setAlertMessage("성범죄자가 집에 찾아왔습니다!!");
+                setModalBackground("yellow");
+                isCriminalDetected = true;
+              } else {
+                setAlertMessage("위험인물이 왔습니다.");
+                setModalBackground("red");
+                isDangerousPersonDetected = true;
+              }
+            }
+          }
         });
 
-        if (isDangerousPersonDetected) {
+        if (isCriminalDetected || isDangerousPersonDetected) {
           setModalIsOpen(true);
         }
       } else {
@@ -98,11 +86,12 @@ function IntroPage() {
   useEffect(() => {
     return () => {
       // 컴포넌트 언마운트 시 웹캠 스트림 중지
-      // if (webcamRef.current && webcamRef.current.srcObject) {
-      //   let tracks = webcamRef.current.srcObject.getTracks();
-      //   tracks.forEach(track => track.stop());
-      //   webcamRef.current.srcObject = null;
-      // }
+      if (webcamRef.current && webcamRef.current.srcObject) {
+        let tracks = webcamRef.current.srcObject.getTracks();
+        tracks.forEach(track => track.stop());
+        // eslint-disable-next-line
+        webcamRef.current.srcObject = null;
+      }
     };
   }, []);
 
@@ -110,14 +99,7 @@ function IntroPage() {
     <div>
       <h3>인트로 페이지</h3>
       <WebcamComponent ref={webcamRef} />
-      {/* <button onClick={startCapture}>캡처 시작</button>
-      <button onClick={stopCapture}>캡처 중단</button> */}
       <button onClick={processImages}>이미지 인식</button>
-      {/* <div>
-        {results.map((result, index) => (
-          <p key={index}>{result}</p>
-        ))}
-      </div> */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -130,19 +112,21 @@ function IntroPage() {
             bottom: 'auto',
             marginRight: '-50%',
             padding: '0px',
-            transform: 'translate(-50%, -50%)'
+            transform: 'translate(-50%, -50%)',
+            background: modalBackground,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center'
           }
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', background: 'red',  padding: '20px 20px' }}>
-          {/* <span><img src="../img/caution.gif" alt="Caution" /></span> */}
-          <img src={caution} style={{ width: '70px' }}/>
-          <div style={{ lineHeight: '1.1' }} >
-            <h2>경고</h2>
-            <h3>위험인물이 집에 찾아왔습니다!!</h3>
-          </div>
-          <button onClick={closeModal} style={{ color: 'red', backgroundColor: 'white', border: 'none', margin: '10px 7px', borderRadius: '5px', cursor: 'pointer' }}>닫기</button>
+        <img src={caution} style={{ width: '70px' }} alt="Caution"/>
+        <div style={{ lineHeight: '1.1', padding: '20px 20px' }}>
+          <h2>경고</h2>
+          <h3>{alertMessage}</h3>
         </div>
+        <button onClick={closeModal} style={{ color: 'red', backgroundColor: 'white', border: 'none', margin: '10px 7px', borderRadius: '5px', cursor: 'pointer' }}>닫기</button>
       </Modal>
     </div>
   );
