@@ -1,126 +1,203 @@
 body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    box-sizing: border-box;
-  }
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
 
-  .MainPg {
-    text-align: center;
-    overflow-x: hidden;
-    padding: 0;
-  }
-  
-  .MainPg-header {
-    position: relative;
-    display: table;
-    width: 100%;
-    height: 100vh;
-    background-image: url("/public/main.PNG");
-    background-size: cover;
-    background-position: center;
-  }
-  
-  .fullscreen-bg img {
-    width: 1980px;
-    height: auto;
-  }
-  
-  .centered {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .content {
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #61dafb;
-    padding: 20px;
-  }
-  
-  .content h2 {
-    font-size: 3em;
-  }
+.MainPg {
+  text-align: center;
+  overflow-x: hidden;
+  padding: 0;
+}
 
-  .content-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
+.MainPg-header {
+  position: relative;
+  display: table;
+  width: 100%;
+  height: 100vh;
+  background-image: url("/public/main.png");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+}
 
-  .content-image{
-    padding: 25px 50px;
-    width: 500px;
-    height: 320px;
-  }
+.centered {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
-  .content-text {
-    display: flex;
-    flex-direction: column;
-    text-align: left; /* 내용을 왼쪽 정렬 */
-  }
-  
-  .content p {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
+.centered button {
+  padding: 10px 20px;
+  font-size: 1.2em;
+  background-color: #c90a0a;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
 
-  .ourservice {
-    height: 40vh;
-    display: flex;
-    flex-direction: column;
-    background-color: #bb961d;
-  }
+.centered button:hover {
+  background-color: #c90a0a;
+  transform: scale(1.05);
+}
 
-  .link-row {
-    display: flex;
-    justify-content: space-around; /* 링크 사이의 간격을 균등하게 분배 */
-    margin-bottom: 20px; /* 각 줄 사이의 간격 */
-  }
+.content {
+  height: auto;
+  padding: 50px 20px;
+  background-color: #f4f4f4;
+}
 
-  .synergy{
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+.content h2 {
+  font-size: 2.5em;
+  color: #333;
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+}
 
-  .synergy div{
-    display: flex;
-    flex-direction: row;
-  }
+.content h2::after {
+  content: '';
+  width: 50px;
+  height: 5px;
+  background: #c90a0a;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
-  .synergy img{
-    border-radius: 50%;
-    width: 300px;
-    height: 300px;
-    object-fit: cover;
-  }
+.content-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 20px;
+  flex-wrap: wrap;
+}
 
-  .ourteam{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 20px; 
-    height: 25vh;
-    background-color: #63538d;
-  }
+.content-image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
 
-  .ourteam img {
-    width: 100px;
-    height: 100px;
-    margin: 10px;
-    border-radius: 50%;
-    transition: transform 0.3s;
-  }
+.content-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
 
-  .ourteam img:hover {
-    transform: scale(1.1);
-  }
+.content-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 25px;
+  font-size: 1.2em;
+  line-height: 1.6;
+  color: #555;
+  max-width: 600px;
+}
+
+.ourservice {
+  padding: 50px 20px;
+  background-color: #000;
+  color: #fff;
+}
+
+.ourservice h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.link-row {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.link-item {
+  font-size: 1.2em;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  background-color: #000;
+  width: 250px;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.link-item:hover {
+  background-color: #ff0000;
+  color: #000;
+  transform: scale(1.05);
+}
+
+.synergy {
+  padding: 50px 20px;
+  background-color: #f4f4f4;
+}
+
+.synergy h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.synergy div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.synergy img {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin: 0 20px;
+  padding: 40px;
+}
+
+.synergy p {
+  font-size: 1.2em;
+  color: #555;
+  max-width: 600px;
+}
+
+.ourteam {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 50px 20px;
+  background-color: #63538d;
+}
+
+.ourteam img {
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+  border-radius: 50%;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.ourteam img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
