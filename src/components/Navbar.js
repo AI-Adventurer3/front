@@ -5,6 +5,9 @@ function Navbar() {
   return (
     <nav>
       <ul>
+      <li>
+          <Link to="/">👀입구컷</Link>
+        </li>
         <li>
           <Link to="/intro">🔴Live</Link>
         </li>
