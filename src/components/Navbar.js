@@ -6,7 +6,7 @@ function Navbar() {
     <nav>
       <ul>
         <li>
-          <Link to="/">🔴Live</Link>
+          <Link to="/intro">🔴Live</Link>
         </li>
         <li>
           <Link to="/register">💢사전등록</Link>

@@ -5,6 +5,7 @@ import RegisterPage from './pages/RegisterPage';
 import DangerPg from './pages/DangerPg';
 import ListPage from './pages/ListPage';
 import IntroPage from './pages/IntroPage';
+import MainPg from './pages/MainPg';
 import './App.css';
 
 function App() {
@@ -29,10 +30,18 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <Routes>
+          <Route 
+              path="/" 
+              element={
+                <MainPg/>
+              } 
+            />
+        </Routes>
         <Navbar />
         <Routes>
           <Route 
-            path="/" 
+            path="/intro" 
             element={
               <IntroPage/>
             } 
