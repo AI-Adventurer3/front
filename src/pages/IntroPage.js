@@ -8,7 +8,7 @@ Modal.setAppElement('#root');  // 모달 접근성을 위한 설정
 
 function IntroPage() {
   const webcamRef = useRef(null);
-  const [setResults] = useState([]);  // 필요에 따라 상태를 유지
+  const [results, setResults] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [modalBackground, setModalBackground] = useState("red");
@@ -28,8 +28,7 @@ function IntroPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ images: capturedImages }),
-        credentials: 'include'  // 필요한 경우 인증 정보를 포함하도록 설정
+        body: JSON.stringify({ images: capturedImages })
       });
 
       if (response.ok) {
@@ -89,7 +88,6 @@ function IntroPage() {
       if (webcamRef.current && webcamRef.current.srcObject) {
         let tracks = webcamRef.current.srcObject.getTracks();
         tracks.forEach(track => track.stop());
-        // eslint-disable-next-line
         webcamRef.current.srcObject = null;
       }
     };
@@ -112,21 +110,18 @@ function IntroPage() {
             bottom: 'auto',
             marginRight: '-50%',
             padding: '0px',
-            transform: 'translate(-50%, -50%)',
-            background: modalBackground,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center'
+            transform: 'translate(-50%, -50%)'
           }
         }}
       >
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', background: modalBackground, padding: '20px 20px' }}>
         <img src={caution} style={{ width: '70px' }} alt="Caution"/>
-        <div style={{ lineHeight: '1.1', padding: '20px 20px' }}>
+          <div style={{ lineHeight: '1.1' }}>
           <h2>경고</h2>
           <h3>{alertMessage}</h3>
         </div>
         <button onClick={closeModal} style={{ color: 'red', backgroundColor: 'white', border: 'none', margin: '10px 7px', borderRadius: '5px', cursor: 'pointer' }}>닫기</button>
+        </div>
       </Modal>
     </div>
   );
