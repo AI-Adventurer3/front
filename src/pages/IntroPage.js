@@ -115,12 +115,12 @@ function IntroPage() {
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', background: modalBackground, padding: '20px 20px' }}>
-        <img src={caution} style={{ width: '70px' }} alt="Caution"/>
+          <img src={caution} style={{ width: '70px' }} alt="Caution"/>
           <div style={{ lineHeight: '1.1' }}>
-          <h2>경고</h2>
-          <h3>{alertMessage}</h3>
-        </div>
-        <button onClick={closeModal} style={{ color: 'red', backgroundColor: 'white', border: 'none', margin: '10px 7px', borderRadius: '5px', cursor: 'pointer' }}>닫기</button>
+            <h2>경고</h2>
+            <h3>{alertMessage}</h3>
+          </div>
+          <button onClick={closeModal} style={{ color: 'red', backgroundColor: 'white', border: 'none', margin: '10px 7px', borderRadius: '5px', cursor: 'pointer' }}>닫기</button>
         </div>
       </Modal>
     </div>
